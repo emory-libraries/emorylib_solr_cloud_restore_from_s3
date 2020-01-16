@@ -11,7 +11,7 @@
   debug:
     var: s3_objects
 
-- pause:
-
 - set_fact:
-    combined_key_list: '{{ s3_objects.results }}'
+    combined_object_list: '{{ s3_objects.results | json_query("s3_keys[*]") | list }}'
+
+- pause:
