@@ -7,16 +7,19 @@
   loop: '{{ sc_restore_list }}'
   register: s3_objects
 
-- name: Show s3 objects
-  debug:
-    var: s3_objects
-
-- set_fact:
+- name: Get combined unique list of objects
+  set_fact:
     combined_object_list: '{{ s3_objects | json_query("results[].s3_keys[]") | list | unique }}'
 
+- name: Get latest object
+  set_fact:
+    latest_backup_list: '{{ combined_object_list | select("search", search_query) | d (False) }}'
+  loop: '{{ sc_restore_list }}'
+  when: item.epoch | lower == 'latest' 
+  vars:
+    search_query: '{{ item.restore_name }}'
+    
 - debug:
-    var: '{{ item | length }}'
-  loop:
-    - '{{ s3_objects["results"][0]["s3_keys"] }}'
-    - '{{ combined_object_list }}'
+    var: sc_restore_list | length
+
 - pause:
