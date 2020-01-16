@@ -15,10 +15,10 @@
   set_fact:
     latest_backup_list: '{{ combined_object_list | select("search", search_query) | d (False) }}'
   loop: '{{ sc_restore_list }}'
-  when: item.epoch | lower == 'latest' 
+  when: item.restore_epoch | lower == 'latest' 
   vars:
     search_query: '{{ item.restore_name }}'
-    
+
 - debug:
     var: sc_restore_list | length
 
