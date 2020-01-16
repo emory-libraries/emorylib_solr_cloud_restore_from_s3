@@ -1,0 +1,11 @@
+---
+- name: List s3 objects in bucket/key
+  aws_s3:
+    bucket: '{{ sc_restore_bucket }}'
+    prefix: '{{ sc_restore_bucket_prefix }}'
+    mode: list
+  register: s3_objects
+
+- name: Show s3 objects
+  debug:
+    var: s3_objects

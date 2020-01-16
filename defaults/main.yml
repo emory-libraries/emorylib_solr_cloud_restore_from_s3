@@ -1,2 +1,6 @@
 ---
 # defaults file for emorylib_solr_cloud_restore_from_s3
+
+## S3 Bucket settings:
+sc_restore_bucket:
+sc_restore_bucket_prefix:
