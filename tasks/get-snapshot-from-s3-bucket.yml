@@ -12,31 +12,24 @@
     __sc_restore_list: '{{ __sc_restore_list | d([]) + [item.0 | combine({"s3_keys": item.1.s3_keys | d () })] }}'
   loop: '{{ sc_restore_list | zip(s3_objects.results) | list }}'
 
-- debug:
-    msg: '{{ item | selectattr("s3_keys", "contains", item.restore_epoch) | length }}'
-  loop: '{{ __sc_restore_list }}'
-  when: item.restore_epoch | lower != 'latest'
-
-- pause:
-
 - name: Fail task if no backups are found
   fail:
     msg: 'No backup files were found at {{ item.bucket_prefix | d (sc_restore_bucket_prefix) }} for {{ item.restore_name }}!'
   loop: '{{ __sc_restore_list }}'
   when: item.s3_keys | length == 0
 
-
-
 - name: Fail task if given epoch is not found
   fail:
     msg: 'No backup matching {{ item.restore_name }}-{{ item.restore_epoch }} was found!'
   loop: '{{ __sc_restore_list }}'
   when:
-    - item.restore_epoch | lower != 'latest'
-  
+    - item.restore_epoch | lower != "latest"
+    - item | selectattr("s3_keys", "contains", item.restore_epoch) | length == 0
   
 - debug:
     var: __sc_restore_list
+
+- pause:
 
 - name: Get combined unique list of objects
   set_fact:
