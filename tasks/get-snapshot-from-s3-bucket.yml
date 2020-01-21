@@ -13,9 +13,9 @@
   loop: '{{ sc_restore_list | zip(s3_objects.results) | list }}'
 
 - debug:
-    msg: '{{ item | selectattr("s3_keys", "contains", item.epoch) | length }}'
+    msg: '{{ item | selectattr("s3_keys", "contains", item.restore_epoch) | length }}'
   loop: '{{ __sc_restore_list }}'
-  when: item.epoch | lower != 'latest'
+  when: item.restore_epoch | lower != 'latest'
 
 - pause:
 
@@ -29,10 +29,10 @@
 
 - name: Fail task if given epoch is not found
   fail:
-    msg: 'No backup matching {{ item.restore_name }}-{{ item.epoch }} was found!'
+    msg: 'No backup matching {{ item.restore_name }}-{{ item.restore_epoch }} was found!'
   loop: '{{ __sc_restore_list }}'
   when:
-    - item.epoch | lower != 'latest'
+    - item.restore_epoch | lower != 'latest'
   
   
 - debug:
