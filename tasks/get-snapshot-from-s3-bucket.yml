@@ -13,7 +13,7 @@
   loop: '{{ sc_restore_list | zip(s3_objects.results) | list }}'
   
 - debug:
-    var: sc_restore_list
+    var: __sc_restore_list
 
 - pause:
 
