@@ -19,7 +19,7 @@
   when: item.s3_keys | length == 0
 
 - debug:
-    msg:  '{{item | selectattr("s3_keys", "contains", item.restore_epoch) | d ()}}'
+    msg:  '{{ __sc_restore_list | selectattr("s3_keys", "contains", item.restore_epoch) | d ()}}'
   loop: '{{ __sc_restore_list }}'
   when: item.restore_epoch | lower != "latest"
 
