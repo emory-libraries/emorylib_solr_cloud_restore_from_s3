@@ -23,7 +23,7 @@
   loop: '{{ __sc_restore_list }}'
   when: 
     - item.restore_epoch | lower != "latest"
-    - item.restore_epoch not in item.s3_keys
+    - item.restore_epoch is not search(item.s3_keys)
 
 - pause:
 
