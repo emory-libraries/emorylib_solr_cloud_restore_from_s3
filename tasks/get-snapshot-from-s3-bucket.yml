@@ -24,7 +24,7 @@
   loop: '{{ __sc_restore_list }}'
   when:
     - item.restore_epoch | lower != "latest"
-    - item | selectattr("s3_keys", "contains", item.restore_epoch) | length == 0
+    - item | selectattr("s3_keys", "contains", item.restore_epoch) | list | length == 0
   
 - debug:
     var: __sc_restore_list
