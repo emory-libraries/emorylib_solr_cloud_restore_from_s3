@@ -11,11 +11,21 @@
   set_fact:
     __sc_restore_list: '{{ __sc_restore_list | d([]) + [item.0 | combine({"s3_keys": item.1.s3_keys | d () })] }}'
   loop: '{{ sc_restore_list | zip(s3_objects.results) | list }}'
+
+- name: Fail task if no keys were found
+  fail:
+    msg: 'No keys were found at {{ item.bucket_prefix | d (sc_restore_bucket_prefix) }} for {{ item.restore_name }}!'
+  loop: '{{ __sc_restore_list }}'
+  when: item.s3_keys | length == 0
+
+- pause:
+
+- name: Fail task if given epoch is not found
+  fail:
+    msg: 'No key matching'
   
 - debug:
     var: __sc_restore_list
-
-- pause:
 
 - name: Get combined unique list of objects
   set_fact:
