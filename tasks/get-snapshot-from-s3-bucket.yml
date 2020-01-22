@@ -26,8 +26,8 @@
   loop: '{{ __sc_restore_list }}'
   when:
     - item.restore_epoch | lower != "latest"
-    - item.restore_key == null 
-    
+    - item.restore_key == "" 
+
 - pause:
 
 - name: Get combined unique list of objects
