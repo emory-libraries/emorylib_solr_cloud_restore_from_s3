@@ -19,13 +19,20 @@
   when: item.s3_keys | length == 0
 
 - debug:
+    msg: '{{ item.s3_keys | select("contains", select_query) }}'
+  loop: '{{ __sc_restore_list }}'
+  vars:
+    select_query: '{{ item.restore_epoch }}'
+- pause:
+
+
+- debug:
     msg:  'No epoch matching was found!!'
   loop: '{{ __sc_restore_list }}'
   when: 
     - item.restore_epoch | lower != "latest"
     - item.restore_epoch is not search(item.s3_keys)
 
-- pause:
 
 - name: Fail task if given epoch is not found
   fail:
