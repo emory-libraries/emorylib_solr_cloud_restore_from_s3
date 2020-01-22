@@ -14,10 +14,6 @@
     regexp: '.*{{ item.0.restore_epoch }}.*'
   loop: '{{ sc_restore_list | zip(s3_objects.results) | list }}'
 
-- debug:
-    var: __sc_restore_list
-- pause:
-
 - name: Fail task if no backups are found
   fail:
     msg: 'No backup files were found at {{ item.bucket_prefix | d (sc_restore_bucket_prefix) }} for {{ item.restore_name }}!'
@@ -28,11 +24,11 @@
   fail:
     msg: 'No backup matching {{ item.restore_name }}-{{ item.restore_epoch }} was found!'
   loop: '{{ __sc_restore_list }}'
-  vars:
-    regexp: '.*{{ item.restore_epoch }}.*'
   when:
     - item.restore_epoch | lower != "latest"
-    - item.s3_keys | map("regex_search", regexp) | first == ""
+    - item.restore_key == null 
+- pause:
+
 
 - debug:
     msg: '{{ item.s3_keys | map("regex_search", regexp) | first }}'
