@@ -27,31 +27,7 @@
   when:
     - item.restore_epoch | lower != "latest"
     - item.restore_key == null 
-- pause:
-
-
-- debug:
-    msg: '{{ item.s3_keys | map("regex_search", regexp) | first }}'
-  loop: '{{ __sc_restore_list }}'
-  vars:
-    regexp: '.*{{ item.restore_epoch }}.*'
-    select_query: '{{ item.restore_epoch }}'
-
-
-
-
-- debug:
-    msg:  'No epoch matching was found!!'
-  loop: '{{ __sc_restore_list }}'
-  when: 
-    - item.restore_epoch | lower != "latest"
-    - item.restore_epoch is not search(item.s3_keys)
-
-
-  
-- debug:
-    var: __sc_restore_list
-
+    
 - pause:
 
 - name: Get combined unique list of objects
