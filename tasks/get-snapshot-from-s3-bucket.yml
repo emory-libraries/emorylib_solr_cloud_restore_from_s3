@@ -19,9 +19,10 @@
   when: item.s3_keys | length == 0
 
 - debug:
-    msg: '{{ item.s3_keys | select("contains", select_query) | first }}'
+    msg: '{{ item.s3_keys | map("regex_search", regexp) | first }}'
   loop: '{{ __sc_restore_list }}'
   vars:
+    regexp: '{{ item.restore_epoch }}'
     select_query: '{{ item.restore_epoch }}'
 - pause:
 
