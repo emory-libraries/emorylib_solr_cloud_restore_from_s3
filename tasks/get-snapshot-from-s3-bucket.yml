@@ -31,7 +31,7 @@
 - name: Download snapshot from s3 bucket
   aws_s3:
     bucket: '{{ item.bucket_name | d (sc_restore_bucket) }}'
-    object: '{{ item.restore_key | d (item.s3_keys[-1]) }}'
+    object: '/{{ item.restore_key | d (item.s3_keys[-1]) }}'
     dest: '{{ sc_restore_temp_path }}'
     mode: get
   loop: '{{ __sc_restore_list }}'
