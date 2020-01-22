@@ -26,7 +26,7 @@
   loop: '{{ __sc_restore_list }}'
   when:
     - item.restore_epoch | lower != "latest"
-    - item.restore_key == "" 
+    - item.restore_key is None 
 
 - pause:
 
