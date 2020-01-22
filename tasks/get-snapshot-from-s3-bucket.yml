@@ -26,7 +26,7 @@
     regexp: '.*{{ item.restore_epoch }}.*'
   when:
     - item.restore_epoch | lower != "latest"
-    - item.s3_keys | map("regex_search", regexp) | first is ""
+    - item.s3_keys | map("regex_search", regexp) | first == ""
 
 - debug:
     msg: '{{ item.s3_keys | map("regex_search", regexp) | first }}'
