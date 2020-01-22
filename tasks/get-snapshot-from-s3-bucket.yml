@@ -22,7 +22,7 @@
     msg: '{{ item.s3_keys | map("regex_search", regexp) | first }}'
   loop: '{{ __sc_restore_list }}'
   vars:
-    regexp: '{{ item.restore_epoch }}'
+    regexp: '*{{ item.restore_epoch }}*'
     select_query: '{{ item.restore_epoch }}'
 - pause:
 
