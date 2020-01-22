@@ -26,10 +26,10 @@
     regexp: '.*{{ item.restore_epoch }}.*'
   when:
     - item.restore_epoch | lower != "latest"
-    - item.s3_keys | map("regex_search", regexp) | first | length == 0
+    - item.s3_keys | map("regex_search", regexp) | first is ""
 
 - debug:
-    msg: '{{ item.s3_keys | map("regex_search", regexp) | first | length }}'
+    msg: '{{ item.s3_keys | map("regex_search", regexp) | first }}'
   loop: '{{ __sc_restore_list }}'
   vars:
     regexp: '.*{{ item.restore_epoch }}.*'
