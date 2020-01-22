@@ -18,12 +18,16 @@
   loop: '{{ __sc_restore_list }}'
   when: item.s3_keys | length == 0
 
-- debug:
-    msg: '{{ item.s3_keys | map("regex_search", regexp) | first }}'
+- name: Fail task if given epoch is not found
+  fail:
+    msg: 'No backup matching {{ item.restore_name }}-{{ item.restore_epoch }} was found!'
   loop: '{{ __sc_restore_list }}'
   vars:
     regexp: '.*{{ item.restore_epoch }}.*'
-    select_query: '{{ item.restore_epoch }}'
+  when:
+    - item.restore_epoch | lower != "latest"
+    - item.s3_keys | map("regex_search", regexp) | first == ""
+
 - pause:
 
 
@@ -35,13 +39,6 @@
     - item.restore_epoch is not search(item.s3_keys)
 
 
-- name: Fail task if given epoch is not found
-  fail:
-    msg: 'No backup matching {{ item.restore_name }}-{{ item.restore_epoch }} was found!'
-  loop: '{{ __sc_restore_list }}'
-  when:
-    - item.restore_epoch | lower != "latest"
-    - item | selectattr("s3_keys", "contains", item.restore_epoch) | list | length == 0
   
 - debug:
     var: __sc_restore_list
