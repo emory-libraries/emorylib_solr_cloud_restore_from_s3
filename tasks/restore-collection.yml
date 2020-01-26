@@ -1,0 +1,10 @@
+---
+- name: List existing collections
+  uri:
+    url: '{{ sc_restore_base_url }}/admin/collections?'
+    body: 'action=LIST'
+    method: POST
+  register: collections_list
+
+- debug:
+    var: collections_list
