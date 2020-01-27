@@ -6,5 +6,14 @@
     method: POST
   register: collections_list
 
+- name: Get list of restore collections that already exists
+  set_fact:
+    existing_collections: '{{ pre_existing_collections | intersect (restore_names) }}'
+  vars:
+    pre_existing_collections:  '{{ collections_list | json_query(query) }}'
+    restore_names: '{{ sc_restore_list | json_query(query2) }}'
+    query: 'json.collections[]'
+    query2: '[].restore_name'
+
 - debug:
-    var: collections_list
+    var: existing_collections
