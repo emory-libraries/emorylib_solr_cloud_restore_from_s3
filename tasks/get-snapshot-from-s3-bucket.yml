@@ -45,9 +45,9 @@
   vars:
     query: 'results[].invocation.module_args.dest'  
 
-- name: Unarchive snapshots
+- name: Unarchive tar.gz files to shared drive location
   unarchive:
     src: '{{ item }}'
-    dest: '{{ sc_restore_temp_path }}'
+    dest: '{{ sc_restore_location }}'
     remote_src: yes
   loop: '{{ snapshot_files }}'

@@ -22,5 +22,8 @@
     - not sc_restore_delete_collection
     - existing_collections | length > 0
 
-- debug:
-    var: existing_collections
+- name: Restore collection(s)
+  uri:
+    url: '{{ sc_restore_base_url }}/admin/collections?'
+    body:
+    method: POST
