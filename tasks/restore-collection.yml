@@ -22,6 +22,29 @@
     - not sc_restore_delete_collection
     - existing_collections | length > 0
 
+- name: Delete collection(s)
+  uri:
+    url: '{{ sc_restore_base_url }}/admin/collections?'
+    body: '{{ params | join ("&") }}'
+    method: POST
+  vars:
+    params:
+      - action=DELETE
+      - 'name={{ item }}'
+      - 'async={{ ansible_date_time.epoch }}-{{ ansible_loop.index }}'
+  when:
+    - sc_restore_delete_collection
+    - existing_collections | length > 0
+  loop: '{{ existing_collections }}'
+  loop_control:
+    extended: yes
+  register: delete_colection_call
+
+- debug:
+    var: delete_colection_call
+    
+- pause:
+
 - name: Restore collection(s)
   uri:
     url: '{{ sc_restore_base_url }}/admin/collections?'
@@ -29,7 +52,7 @@
     method: POST
   loop: '{{ __sc_restore_list }}'
   loop_control:
-    pause: 3
+    extended: yes
   vars:
     object_name: '{{ item.restore_key | ternary (item.restore_key, item.s3_keys[-1]) }}'
     params:
@@ -37,7 +60,7 @@
       - 'name={{ object_name | basename | regex_replace(".tar.gz") }}'
       - 'location={{ sc_restore_location }}'
       - 'collection={{ item.collection_name }}'
-      - 'async={{ ansible_date_time.epoch }}'
+      - 'async={{ ansible_date_time.epoch }}-{{ ansible_loop.index }}'
   register: collection_call
 
 - debug:
