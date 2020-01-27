@@ -27,7 +27,7 @@
     url: '{{ sc_restore_base_url }}/admin/collections?'
     body: '{{ params | join ("&") }}'
     method: POST
-  loop: '{{ sc_restore_list }}'
+  loop: '{{ __sc_restore_list }}'
   loop_control:
     pause: 3
   vars:
