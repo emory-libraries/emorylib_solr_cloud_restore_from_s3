@@ -8,12 +8,12 @@
 
 - name: Get list of restore collections that already exists
   set_fact:
-    existing_collections: '{{ pre_existing_collections | intersect (restore_names) }}'
+    existing_collections: '{{ pre_existing_collections | intersect (collection_names) }}'
   vars:
     pre_existing_collections:  '{{ collections_list | json_query(query) }}'
-    restore_names: '{{ sc_restore_list | json_query(query2) }}'
+    collection_names: '{{ sc_restore_list | json_query(query2) }}'
     query: 'json.collections[]'
-    query2: '[].restore_name'
+    query2: '[].collection_name'
 
 - debug:
     var: existing_collections
