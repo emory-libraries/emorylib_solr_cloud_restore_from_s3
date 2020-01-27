@@ -34,7 +34,7 @@
     object_name: '{{ item.restore_key | ternary (item.restore_key, item.s3_keys[-1]) }}'
     params:
       - action=RESTORE
-      - 'name={{ object_name | basename | regex_replace(".tar.gz", "") }}'
+      - 'name={{ object_name | basename | regex_replace(".tar.gz") }}'
       - 'location={{ sc_restore_location }}'
       - 'collection={{ item.collection_name }}'
       - 'async={{ ansible_date_time.epoch }}'
