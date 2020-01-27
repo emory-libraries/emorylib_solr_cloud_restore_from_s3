@@ -38,4 +38,8 @@
       - 'location={{ sc_restore_location }}'
       - 'collection={{ item.collection_name }}'
       - 'async={{ ansible_date_time.epoch }}'
+  register: collection_call
+
+- debug:
+    var: collection_call
     
