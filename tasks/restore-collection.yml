@@ -25,5 +25,17 @@
 - name: Restore collection(s)
   uri:
     url: '{{ sc_restore_base_url }}/admin/collections?'
-    body:
+    body: '{{ params | join ("&") }}'
     method: POST
+  loop: '{{ sc_restore_list }}'
+  loop_control:
+    pause: 3
+  vars:
+    object_name: '{{ item.restore_key | ternary (item.restore_key, item.s3_keys[-1]) }}'
+    params:
+      - action=RESTORE
+      - 'name={{ object_name | basename | regex_replace(".tar.gz", "") }}'
+      - 'location={{ sc_restore_location }}'
+      - 'collection={{ item.collection_name }}'
+      - 'async={{ ansible_date_time.epoch }}'
+    
