@@ -7,4 +7,6 @@
 - name: Include tasks for restoring collection
   include_tasks:
     file: restore-collection.yml
+    apply:
+      tags: restore-collection
   tags: restore-collection
