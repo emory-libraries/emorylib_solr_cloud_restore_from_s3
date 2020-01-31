@@ -12,6 +12,15 @@
     apply:
       become: yes
 
+- name: Include tasks for deleting collections
+  include_tasks:
+    file: delete-collections.yml
+    apply:
+      become: yes
+  when:
+    - sc_restore_delete_collection
+    - existing_collections | length > 0
+
 - name: Include tasks for restoring collection
   include_tasks:
     file: restore-collection.yml
