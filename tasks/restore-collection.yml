@@ -14,7 +14,7 @@
       - 'name={{ object_name | basename | regex_replace(".tar.gz") }}'
       - 'location={{ sc_restore_location }}'
       - 'collection={{ item.collection_name }}'
-      - 'async={{ ansible_date_time.epoch }}-{{ ansible_loop.index + index_offset | int }}'
+      - 'async={{ ansible_date_time.epoch }}-{{ ansible_loop.index + index_offset | int | d (0) }}'
   register: collection_call
 
 - name: Check request ids for completed restores
