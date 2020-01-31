@@ -6,6 +6,12 @@
     apply:
       become: yes
 
+- name: Include tasks for checking if collection already exists
+  include_tasks:
+    file: check-for-existing-collection.yml
+    apply:
+      become: yes
+
 - name: Include tasks for restoring collection
   include_tasks:
     file: restore-collection.yml
