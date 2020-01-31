@@ -15,7 +15,8 @@
       - 'location={{ sc_restore_location }}'
       - 'collection={{ item.collection_name }}'
       - 'async={{ ansible_date_time.epoch }}-{{ ansible_loop.index + index_offset }}'
-    index_offset: '{{ delete_colection_call | json_query("results[-1].ansible_loop.index") | d (0) }}'
+    index_offset: '{{ delete_colection_call is defined | ternary(index_offset_query, 0) }}'
+    index_offset_query: '{{ delete_colection_call | json_query("results[-1].ansible_loop.index") }}'
   register: collection_call
 
 - debug:
