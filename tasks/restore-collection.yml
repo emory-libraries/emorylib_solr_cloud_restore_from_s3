@@ -1,10 +1,4 @@
 ---
-
-- name: Get index offset from delete tasks
-  set_fact:
-    index_offset: '{{ delete_colection_call.results[-1].ansible_loop.index | int }}'
-  when: delete_colection_call is defined
-
 - name: Restore collection(s)
   uri:
     url: '{{ sc_restore_base_url }}/admin/collections?'
