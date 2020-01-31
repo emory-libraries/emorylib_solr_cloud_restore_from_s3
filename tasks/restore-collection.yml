@@ -17,6 +17,9 @@
       - 'async={{ ansible_date_time.epoch }}-{{ ansible_loop.index }}'
   register: collection_call
 
+- debug:
+    var: collection_call
+
 - name: Check request ids for completed restores
   uri:
     url: '{{ sc_restore_base_url }}/admin/collections?'
