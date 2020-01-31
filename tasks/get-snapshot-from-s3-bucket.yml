@@ -13,6 +13,8 @@
     search: '{{ item.0.restore_epoch }}'
   loop: '{{ sc_restore_list | zip(s3_objects.results) | list }}'
 
+- debug:
+    var: test
 - pause:
 
 - name: Create new restore_list with associated object list
