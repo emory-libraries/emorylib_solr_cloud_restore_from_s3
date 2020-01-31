@@ -7,6 +7,14 @@
   loop: '{{ sc_restore_list }}'
   register: s3_objects
 
+- set_fact:
+    test: '{{ item.1.s3_keys | select("contains", search) }}'
+  vars:
+    search: '{{ item.0.restore_epoch }}'
+  loop: '{{ sc_restore_list | zip(s3_objects.results) | list }}'
+
+- pause:
+
 - name: Create new restore_list with associated object list
   set_fact:
     __sc_restore_list: '{{ __sc_restore_list | d([]) + [item.0 | combine({"s3_keys": item.1.s3_keys | d () }, {"restore_key":  item.1.s3_keys | select("contains", search) | first})] }}'
