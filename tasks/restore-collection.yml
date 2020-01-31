@@ -2,7 +2,7 @@
 
 - name: Get index offset from delete tasks
   set_fact:
-    index_offset: '{{ delete_colection_call | json_query("results[-1].ansible_loop.index") }}'
+    index_offset: '{{ delete_colection_call.results[-1].ansible_loop.index }}'
   when: delete_colection_call is defined
 
 - name: Restore collection(s)
@@ -23,9 +23,6 @@
       - 'async={{ ansible_date_time.epoch }}-{{ ansible_loop.index + index_offset | d (0) }}'
   register: collection_call
 
-- debug:
-    var: collection_call
-
 - name: Check request ids for completed restores
   uri:
     url: '{{ sc_restore_base_url }}/admin/collections?'
@@ -43,4 +40,3 @@
   failed_when: state == 'failed'
   retries: '{{ sc_restore_retries }}'
   delay: '{{ sc_restore_delay }}'
-    
