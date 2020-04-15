@@ -1,8 +1,11 @@
 ---
+- name: Pip install awscli
+  pip:
+    name: awscli
+
 - name: Get bucket keys via aws s3 ls
   shell: aws s3 ls {{ solr_cloud_restore.source.s3.bucket }}/{{ solr_cloud_restore.source.s3.key_prefix }} | sed 's/PRE //g' | sed 's/.$//g'
   register: bucket_key_info
-  delegate_to: localhost
 
 - debug:
     var: bucket_key_info
