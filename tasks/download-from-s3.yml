@@ -50,6 +50,15 @@
     owner: '{{ solr_cloud_restore_owner }}'
     group: '{{ solr_cloud_restore_group }}'
 
+- name: Download bucket key to epoch tmp via aws s3 sync
+  shell: >
+    aws s3 sync {{ epoch_tmp_path }}/{{ bucket_key }} 
+    s3://{{ solr_cloud_restore.source.s3.bucket }}/{{ solr_cloud_restore.source.s3.key_prefix | regex_replace(get_trailing_slash, "") }}/{{ bucket_key }}/
+  vars:
+    get_trailing_slash: \/$
+    
+- pause:
+
 - name: Download bucket key to epoch tmp
   aws_s3:
     bucket: '{{ solr_cloud_restore.source.s3.bucket }}'
@@ -60,4 +69,4 @@
   vars:
     get_trailing_slash: \/$
 
-- pause:
+
