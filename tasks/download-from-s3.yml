@@ -9,5 +9,23 @@
     get_trailing_slash: \/$
   register: bucket_key_info
 
-- debug:
-    var: bucket_key_info
+- name: Set bucket keys
+  set_fact:
+    bucket_keys: '{{ bucket_key_info.stdout_lines | map("trim") | list }}'
+
+- name: Get bucket key from date
+  block:
+    - name: Set bucket key
+      set_fact:
+        bucket_key: '{{ bucket_keys | select("equalto", solr_cloud_restore.source.s3.date) }}'
+    
+    - debug:
+        var: bucket_key
+    - pause:
+    - name: Assert that one key was found
+      assert:
+        that:
+          - bucket_key | length > 0
+        quiet: yes
+        fail_msg: No bucket key was found
+  when: solr_cloud_restore.source.s3.date | lower != "latest"
