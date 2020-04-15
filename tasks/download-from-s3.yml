@@ -40,33 +40,32 @@
     bucket_key: '{{ bucket_keys[-1] }}'
   when: solr_cloud_restore.source.s3.date | lower == "latest"
 
-- debug:
-    var: bucket_key
-
-- name: Create epoch tmp directory
+- name: Create tmp directories
   file:
-    path: '{{ epoch_tmp_path }}'
+    path: '{{ item }}'
     state: directory
     owner: '{{ solr_cloud_restore_owner }}'
     group: '{{ solr_cloud_restore_group }}'
+  loop: '{{ tmp_dirs }}'
+  vars:
+    tmp_dirs:
+      - '{{ epoch_tmp_path }}'
+      - '{{ epoch_tmp_path }}/{{ bucket_key }}'
 
 - name: Download bucket key to epoch tmp via aws s3 sync
   shell: >
     aws s3 sync s3://{{ solr_cloud_restore.source.s3.bucket }}/{{ solr_cloud_restore.source.s3.key_prefix | regex_replace(get_trailing_slash, "") }}/{{ bucket_key }}/
-    {{ epoch_tmp_path }}
+    {{ epoch_tmp_path }}/
   vars:
     get_trailing_slash: \/$
-    
+
+- name: Set proper permissons on input folder
+  file:
+    path: '{{ epoch_tmp_path }}'
+    state: directory
+    recurse: yes
+    owner: '{{ solr_cloud_restore_owner }}'
+    group: '{{ solr_cloud_restore_group }}'
+
 - pause:
-
-- name: Download bucket key to epoch tmp
-  aws_s3:
-    bucket: '{{ solr_cloud_restore.source.s3.bucket }}'
-    object: '{{ solr_cloud_restore.source.s3.key_prefix | regex_replace(get_trailing_slash, "") }}/{{ bucket_key }}/*'
-    region: '{{ solr_cloud_restore.source.s3.region | d (omit) }}'
-    dest: '{{ epoch_tmp_path }}'
-    mode: get
-  vars:
-    get_trailing_slash: \/$
-
 
