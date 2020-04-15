@@ -55,6 +55,7 @@
     bucket: '{{ solr_cloud_restore.source.s3.bucket }}'
     object: '{{ solr_cloud_restore.source.s3.key_prefix | regex_replace(get_trailing_slash, "") }}/{{ bucket_key }}'
     region: '{{ solr_cloud_restore.source.s3.region | d (omit) }}'
+    dest: '{{ epoch_tmp_path }}'
     mode: get
   vars:
     get_trailing_slash: \/$
