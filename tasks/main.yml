@@ -3,6 +3,7 @@
 - name: Include tasks for downloading folder from s3
   include_tasks:
     file: download-from-s3.yml
+  delegate_to: localhost
 
 - pause:
 
