@@ -17,7 +17,7 @@
   block:
     - name: Set bucket key
       set_fact:
-        bucket_key: '{{ bucket_keys | select("equalto", solr_cloud_restore.source.s3.date) }}'
+        bucket_key: '{{ bucket_keys | select("equalto", solr_cloud_restore.source.s3.date) | last }}'
     
     - debug:
         var: bucket_key
