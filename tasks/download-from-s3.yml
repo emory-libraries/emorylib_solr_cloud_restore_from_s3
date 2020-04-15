@@ -12,6 +12,7 @@
 - name: Set bucket keys
   set_fact:
     bucket_keys: '{{ bucket_key_info.stdout_lines | map("trim") | list }}'
+    epoch_tmp_path: '{{ solr_cloud_restore.source.s3.tmp_path }}/{{ ansible_date_time.epoch }}'
 
 - name: Assert that at least one bucket key was found
   assert:
@@ -38,3 +39,24 @@
   set_fact:
     bucket_key: '{{ bucket_keys[-1] }}'
   when: solr_cloud_restore.source.s3.date | lower == "latest"
+
+- debug:
+    var: bucket_key
+
+- name: Create epoch tmp directory
+  file:
+    path: '{{ epoch_tmp_path }}'
+    state: directory
+    owner: '{{ solr_cloud_restore_owner }}'
+    group: '{{ solr_cloud_restore_group }}'
+
+- name: Download bucket key to epoch tmp
+  aws_s3:
+    bucket: '{{ solr_cloud_restore.source.s3.bucket }}'
+    object: '{{ solr_cloud_restore.source.s3.key_prefix | regex_replace(get_trailing_slash, "") }}/{{ bucket_key }}'
+    region: '{{ solr_cloud_restore.source.s3.region | d (omit) }}'
+    mode: get
+  vars:
+    get_trailing_slash: \/$
+
+- pause:
