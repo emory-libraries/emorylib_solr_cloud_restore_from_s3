@@ -13,19 +13,28 @@
   set_fact:
     bucket_keys: '{{ bucket_key_info.stdout_lines | map("trim") | list }}'
 
+- name: Assert that at least one bucket key was found
+  assert:
+    that:
+      - bucket_keys | length > 0
+    quiet: yes
+    fail_msg: No bucket keys were found
+
 - name: Get bucket key from date
   block:
     - name: Set bucket key
       set_fact:
-        bucket_key: '{{ bucket_keys | select("equalto", solr_cloud_restore.source.s3.date) | list | last }}'
+        bucket_key: '{{ bucket_keys | select("equalto", solr_cloud_restore.source.s3.date) | list | last | d ("none") }}'
     
-    - debug:
-        var: bucket_key
-    - pause:
-    - name: Assert that one key was found
+    - name: Assert that speficied key was found
       assert:
         that:
-          - bucket_key | length > 0
+          - bucket_key != "none"
         quiet: yes
-        fail_msg: No bucket key was found
+        fail_msg: No matching date key was found
   when: solr_cloud_restore.source.s3.date | lower != "latest"
+
+- name: Get latest bucket_key
+  set_fact:
+    bucket_key: '{{ bucket_keys[-1] }}'
+  when: solr_cloud_restore.source.s3.date | lower == "latest"
