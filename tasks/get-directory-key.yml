@@ -37,7 +37,7 @@
 
 - name: Set directory key
   set_fact:
-    directory_key: '{{ directory_path | dirname }}'
+    directory_key: '{{ directory_path | basename }}'
 
 - debug:   
     var: directory_key
