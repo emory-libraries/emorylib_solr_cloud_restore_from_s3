@@ -16,7 +16,7 @@
 
 - name: Set matching collections
   set_fact:
-    matching_collections: '{{ existing_collections | select("contains", solr_cloud_restore.collection.delete_all_matching) | list }}'
+    matching_collections: '{{ existing_collections | select("contains", solr_cloud_restore.collection.delete_all_matching) | reject("match", solr_cloud_restore.collection.name) | list }}'
   when: solr_cloud_restore.collection.delete_all_matching is defined
   
 - name: Assert collection overwrite logic
