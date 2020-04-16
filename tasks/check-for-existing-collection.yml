@@ -13,7 +13,9 @@
 - name: Set matching collections
   set_fact:
     check_if_collection_already_exists: '{{ existing_collections | select("match", solr_cloud_restore.collection.name) | list | last | d ("none") }}'
-    matching_collections: '{{ existing_collections | select("contains", solr_cloud_restore.collection.delete_all_matching) | list }}'
+    matching_collections: '{{ solr_cloud_restore.collection.delete_all_matching is defined | ternary (match_collections, []) }}'
+  vars:
+    match_collections: '{{ existing_collections | select("contains", solr_cloud_restore.collection.delete_all_matching) | list }}'
   
 - debug:
     var: item
