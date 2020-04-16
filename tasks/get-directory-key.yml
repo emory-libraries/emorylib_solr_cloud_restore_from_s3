@@ -8,4 +8,11 @@
 - debug:
     var: directory_key_info
 
+- name: Set directory keys
+  set_fact:
+    directory_keys: '{{ directory_key_info | json_query("files[].path") }}'
+
+- debug:   
+    var: directory_keys
+
 - pause:
