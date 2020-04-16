@@ -1,16 +1,31 @@
 ---
 - name: List existing collections
   uri:
-    url: '{{ sc_restore_base_url }}/admin/collections?'
+    url: '{{ solr_cloud_restore_base_url }}/collections?'
     body: 'action=LIST'
     method: POST
-  register: collections_list
+  register: collections_info
+
+- name: Set list of collections
+  set_fact:
+    existing_collections: '{{ collections_info | json_query("json.collections[]") }}'
+
+- name: Set matching collections
+  set_fact:
+    check_if_collection_already_exists: '{{ existing_collections | select("match", solr_cloud_restore.collection.name) | list | last | d ("none") }}'
+    matching_collections: '{{ existing_collections | select("contains", solr_cloud_restore.collection.delete_all_matching) | list }}'
+  
+- debug:
+    var: item
+  loop: [check_if_collection_already_exists, matching_collections]
+
+- pause:
 
 - name: Get list of restore collections that already exists
   set_fact:
     existing_collections: '{{ pre_existing_collections | intersect (collection_names) }}'
   vars:
-    pre_existing_collections:  '{{ collections_list | json_query(query) }}'
+    pre_existing_collections:  '{{ collections_info | json_query(query) }}'
     collection_names: '{{ sc_restore_list | json_query(query2) }}'
     query: 'json.collections[]'
     query2: '[].collection_name'
