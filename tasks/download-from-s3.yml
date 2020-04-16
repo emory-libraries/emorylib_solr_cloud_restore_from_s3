@@ -66,6 +66,3 @@
     recurse: yes
     owner: '{{ solr_cloud_restore_owner }}'
     group: '{{ solr_cloud_restore_group }}'
-
-- pause:
-

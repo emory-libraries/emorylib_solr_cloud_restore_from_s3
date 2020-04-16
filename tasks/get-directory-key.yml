@@ -1,0 +1,11 @@
+---
+- name: Find directory keys from source
+  find:
+    path: '{{  solr_cloud_restore.source.file.path }}'
+    file_type: directory
+  register: directory_key_info
+
+- debug:
+    var: directory_key_info
+
+- pause:
