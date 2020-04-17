@@ -12,6 +12,9 @@
   loop: '{{ solr_cloud_restore.aliases }}'
   register: modify_alias_call
 
+- debug:
+    var: modify_alias_call
+
 - name: Check request ids for completed deletion of collection
   uri:
     url: '{{ solr_cloud_restore_base_url }}/collections?'
