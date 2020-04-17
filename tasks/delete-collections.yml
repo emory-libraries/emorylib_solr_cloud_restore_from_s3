@@ -1,4 +1,8 @@
 ---
+- debug:
+    var: delete_collections
+- pause:
+
 - name: Delete collection(s) API call
   uri:
     url: '{{ solr_cloud_restore_base_url }}/collections?'
