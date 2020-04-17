@@ -8,7 +8,7 @@
     params:
       - action=DELETE
       - 'name={{ item }}'
-      - 'async={{ ansible_date_time.epoch }}-{{ index | int + ansible_loop.index }}'
+      - 'async={{ ansible_date_time.epoch }}-{{ index | int + ansible_loop.index | int }}'
   loop: '{{ delete_collections }}'
   loop_control:
     extended: yes
