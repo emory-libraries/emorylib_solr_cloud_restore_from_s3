@@ -8,28 +8,21 @@
 #  include_tasks:
 #    file: download-from-s3.yml
 
-- name: Include tasks for checking if collection already exists
+- name: Include tasks to check for matching collections
   include_tasks:
-    file: check-for-existing-collection.yml
-    apply:
-      tags: delete-solr-collection
-  tags: delete-solr-collection
+    file: check-for-matching-collection.yml
 
-- name: Include tasks for deleting collections
+- name: Include tasks deleting collection that will be recreated
   include_tasks:
     file: delete-collections.yml
-    apply:
-      become: yes
-      tags: delete-solr-collection
-  tags: delete-solr-collection
-  when:
-    - sc_restore_delete_collection
-    - existing_collections | length > 0
+    vars:
+      index: '{{ index | d (0) + index_offset | d (0) }}'
+      delete_collections: '{{ check_if_collection_already_exists | list }}'
+  when: check_if_collection_already_exists != "none"
 
 - name: Include tasks for restoring collection
   include_tasks:
     file: restore-collection.yml
     apply:
       tags: restore-collection
-      become: yes
   tags: restore-collection

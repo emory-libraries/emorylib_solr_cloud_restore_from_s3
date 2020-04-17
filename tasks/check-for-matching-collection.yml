@@ -25,5 +25,3 @@
     quiet: yes
     fail_msg: The collection name already exists, if you want to delete it please set solr_cloud_restore.collection.delete_if_collection_exists to yes
   when: check_if_collection_already_exists != "none"
-
-- pause:

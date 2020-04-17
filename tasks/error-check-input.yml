@@ -1,0 +1,12 @@
+---
+- name: Assert file and s3 source are exclusive
+  assert:
+    that: solr_cloud_restore.source.file is undefined or solr_cloud_restore.source.s3 is undefined
+    quiet: yes
+    fail_msg: .source.file and .source.s3 are exclusive options
+
+- name: Set fact for restore location
+  set_fact:
+    solr_cloud_restore_location: '{{ solr_cloud_restore.source.file.path | d (solr_cloud_restore.source.s3.tmp_path) }}'
+
+- 
