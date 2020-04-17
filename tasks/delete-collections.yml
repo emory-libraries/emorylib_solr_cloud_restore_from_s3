@@ -8,10 +8,8 @@
     params:
       - action=DELETE
       - 'name={{ item }}'
-      - 'async={{ ansible_date_time.epoch }}-{{ index | int + ansible_loop.index | int }}'
+      - 'async={{ ansible_date_time.epoch }}-delete-{{ item }}'
   loop: '{{ delete_collections }}'
-  loop_control:
-    extended: yes
   register: delete_colection_call
 
 - name: Check request ids for completed deletion of collection
@@ -32,6 +30,6 @@
   retries: '{{ solr_cloud_restore_retries }}'
   delay: '{{ solr_cloud_restore_delay }}'
 
-- name: Get index offset from delete tasks
-  set_fact:
-    index_offset: '{{ delete_colection_call | json_query("results[-1].ansible_loop.index") + index_offset | d (0) | int }}'
+#- name: Get index offset from delete tasks
+#  set_fact:
+#    index_offset: '{{ delete_colection_call | json_query("results[-1].ansible_loop.index") + index_offset | d (0) | int }}'
