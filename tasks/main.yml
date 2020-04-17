@@ -28,9 +28,9 @@
     file: delete-collections.yml
     apply:
       run_once: yes
-    vars:
-      index: '{{ index | d (0) + index_offset | d (0) }}'
-      delete_collections: '{{ check_if_collection_already_exists | list }}'
+  vars:
+    index: '{{ index | d (0) + index_offset | d (0) }}'
+    delete_collections: '{{ check_if_collection_already_exists | list }}'
   when: check_if_collection_already_exists != "none"
 
 - name: Include tasks for restoring collection
