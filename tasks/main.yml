@@ -26,8 +26,7 @@
 - name: Include tasks deleting collection that will be recreated
   include_tasks:
     file: delete-collections.yml
-    apply:
-      run_once: yes
+  run_once: yes
   vars:
     index: '{{ index | d (0) + index_offset | d (0) }}'
     delete_collections: '{{ check_if_collection_already_exists | list }}'
