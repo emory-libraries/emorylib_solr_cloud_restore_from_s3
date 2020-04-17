@@ -3,7 +3,7 @@
     var1: value1
 
 - debug:
-    var: (var1) | list
+    var: (var1) | list | join(",")
 
 - pause:
 
