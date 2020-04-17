@@ -9,11 +9,9 @@
       - action=CREATEALIAS
       - 'name={{ item }}'
       - 'collections={{ solr_cloud_restore.collection.name }}'
+      - 'async={{ ansible_date_time.epoch }}-{{ item }}-{{ solr_cloud_restore_location | basename }}'
   loop: '{{ solr_cloud_restore.aliases }}'
   register: modify_alias_call
-
-- debug:
-    var: modify_alias_call
 
 - name: Check request ids for completed deletion of collection
   uri:
