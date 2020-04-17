@@ -1,4 +1,12 @@
 ---
+- set_fact:
+    var1: value1
+
+- debug:
+    var: value1 | list
+
+- pause:
+
 - name: Assert file and s3 source are exclusive
   assert:
     that: solr_cloud_restore.source.file is undefined or solr_cloud_restore.source.s3 is undefined
