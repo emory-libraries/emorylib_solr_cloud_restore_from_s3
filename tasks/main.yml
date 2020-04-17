@@ -3,11 +3,6 @@
 - name: Include tasks to error check input
   include_tasks: error-check-input.yml
 
-- name: Include tasks to check for matching collections
-  include_tasks:
-    file: check-for-matching-collection.yml
-  run_once: yes
-
 - name: Include tasks for getting directory key from local path
   include_tasks:
     file: get-directory-key.yml
@@ -20,6 +15,11 @@
   run_once: yes
   when: solr_cloud_restore.source.s3 is defined
 
+- name: Include tasks to check for matching collections
+  include_tasks:
+    file: check-for-matching-collection.yml
+  run_once: yes
+  
 - name: Include tasks deleting collection that will be recreated
   include_tasks:
     file: delete-collections.yml
