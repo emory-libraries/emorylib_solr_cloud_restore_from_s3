@@ -3,7 +3,7 @@
     var1: value1
 
 - debug:
-    var: value1 | list
+    var: var1 | list
 
 - pause:
 
