@@ -19,13 +19,12 @@
   include_tasks:
     file: check-for-matching-collection.yml
   run_once: yes
-  
+
 - name: Include tasks deleting collection that will be recreated
   include_tasks:
     file: delete-collections.yml
   run_once: yes
   vars:
-    #index: '{{ index | d (0) + index_offset | d (0) }}'
     delete_collections: '{{ tmp_list | d ([]) + [check_if_collection_already_exists] }}'
   when: check_if_collection_already_exists != "none"
 
@@ -33,3 +32,18 @@
   include_tasks:
     file: restore-collection.yml
   run_once: yes
+
+- name: Include tasks to create/modify aliases
+  include_tasks:
+    file: create-modify-aliases.yml
+  run_once: yes
+  when: solr_cloud_restore.aliases is defined
+
+- name: Include tasks to delete collections based on pattern
+  include_tasks:
+    file: delete-collections.yml
+  run_once: yes
+  vars:
+    delete_collections: '{{ matching_collections }}'
+  when: matching_collections | d (False)
+    

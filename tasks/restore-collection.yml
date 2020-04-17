@@ -10,10 +10,10 @@
       - 'name={{ solr_cloud_restore_location | basename }}'
       - 'location={{ solr_cloud_restore_location | dirname }}'
       - 'collection={{ solr_cloud_restore.collection.name }}'
-      - 'async={{ ansible_date_time.epoch }}-{{ 1 + index_offset | d (0) | int }}'
+      - 'async={{ ansible_date_time.epoch }}-restore-{{ solr_cloud_restore_location | basename }}'
   register: collection_call
 
-- name: Check request ids for completed restores
+- name: Check request id for completed restores
   uri:
     url: '{{ solr_cloud_restore_base_url }}/collections?'
     body: '{{ params | join("&") }}'
