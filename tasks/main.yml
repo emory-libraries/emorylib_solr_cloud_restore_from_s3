@@ -46,4 +46,9 @@
   vars:
     delete_collections: '{{ matching_collections }}'
   when: matching_collections | d (False)
-    
+
+- name: Clean s3 temp folder
+  file:
+    path: '{{ epoch_tmp_path }}'
+    state: absent
+  when: epoch_tmp_path | d (False)
