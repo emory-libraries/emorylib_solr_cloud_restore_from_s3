@@ -20,10 +20,14 @@
 - name: Include tasks to check for matching collections
   include_tasks:
     file: check-for-matching-collection.yml
+    apply:
+      run_once: yes
 
 - name: Include tasks deleting collection that will be recreated
   include_tasks:
     file: delete-collections.yml
+    apply:
+      run_once: yes
     vars:
       index: '{{ index | d (0) + index_offset | d (0) }}'
       delete_collections: '{{ check_if_collection_already_exists | list }}'
@@ -33,5 +37,6 @@
   include_tasks:
     file: restore-collection.yml
     apply:
+      run_once: yes
       tags: restore-collection
   tags: restore-collection
