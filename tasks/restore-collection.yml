@@ -26,7 +26,7 @@
       - 'name={{ solr_cloud_restore_location | basename }}'
       - 'location={{ solr_cloud_restore_location | dirname }}'
       - 'collection={{ solr_cloud_restore.collection.name }}'
-      - 'async={{ ansible_date_time.epoch }}-{{ ansible_loop.index + index_offset | d (0) | int }}'
+      - 'async={{ ansible_date_time.epoch }}-{{ 1 + index_offset | d (0) | int }}'
   register: collection_call
 
 - name: Check request ids for completed restores
