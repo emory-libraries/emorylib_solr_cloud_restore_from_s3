@@ -52,3 +52,9 @@
     path: '{{ epoch_tmp_path }}'
     state: absent
   when: epoch_tmp_path | d (False)
+
+- name: Delete local directories containing backups
+  file:
+    path: '{{ directory_paths | d () }}'
+    state: absent
+  when: solr_cloud_restore.source.file.clean_path | d (False)
