@@ -9,11 +9,6 @@
   set_fact:
     directory_paths: '{{ directory_path_info.files | sort(attribute="ctime") | map(attribute="path") | list }}'
 
-- debug:
-    var: directory_paths
-  
-- pause:
-
 - name: Assert that at least one directory path was found
   assert:
     that:
