@@ -5,18 +5,9 @@
     file_type: directory
   register: directory_path_info
 
-- debug:
-    var: directory_path_info
-- pause:
-
 - name: Set directory paths
   set_fact:
-    directory_paths: '{{ directory_path_info.files | sort("ctime") | map(attribute="path") | list }}'
-
-- debug:
-    var: directory_paths
-
-- pause:
+    directory_paths: '{{ directory_path_info.files | sort(attribute="ctime") | map(attribute="path") | list }}'
 
 - name: Assert that at least one directory path was found
   assert:
