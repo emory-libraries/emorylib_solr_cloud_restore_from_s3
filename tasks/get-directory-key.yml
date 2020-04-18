@@ -5,6 +5,10 @@
     file_type: directory
   register: directory_path_info
 
+- debug:
+    var: directory_path_info
+- pause:
+
 - name: Set directory paths
   set_fact:
     directory_paths: '{{ directory_path_info.files | sort("ctime") | map(attribute="path") | list }}'
